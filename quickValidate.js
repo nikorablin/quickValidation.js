@@ -3,7 +3,16 @@
 		
 		// defaults
 		var defaults = {
-			class: ".quickValidate"
+			class: ".quickValidate",
+			errorRequired: "$name is a required field",
+			errorMaxlength: "$name can only be $value characters long",
+			errorMinlength: "$name must be at least $value character(s) long",
+			errorNumber: "$name must be a number",
+			errorInteger: "$name must be an integer",
+			errorRange: "$name must be between $min and $max",
+			errorEmail: "$name must be a valid email address",
+			errorPhone: "$name must be a valid phone number",
+			errorExpression: "$name is not valid"
 		}
 		
 		var options = $.extend(defaults, options);
@@ -15,16 +24,31 @@
 			var obj = this;
 			var intRegex = /^\d+$/;
 			var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
+			var phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+			var emailRegex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
+			
+			function capitalize(string) {
+			    return string.charAt(0).toUpperCase() + string.slice(1);
+			}
 			
 			// namespace for form object
 			var form = {
 				
+				// initialize error message
 				error: "",
+				
+				// get error message
+				getErrorMessage: function(input, type, value, min, max) {
+					value = typeof value !== 'undefined' ? value : null;
+					min = typeof min !== 'undefined' ? min : null;
+					max = typeof max !== 'undefined' ? max : null;
+					return o['error' + capitalize(type)].replace('$name', $(input).attr('name')).replace('$value', value).replace('$min', min).replace('$max', max);
+				},
 				
 				// validate required fields
 				checkrequired: function(input) {	
 					if ($(input).val() == "" || $(input).val().length == 0) {
-						form.error = $(input).attr('name') + " is a requird field.";
+						form.error = form.getErrorMessage(input, 'required');
 						$(input).focus();
 						return false;
 					}
@@ -34,8 +58,8 @@
 				// validate max length
 				checkmaxlength: function(input, value) {
 					
-					if ($(input).val().length > value) {
-						form.error = $(input).attr('name') + " can only be " + value + " characters long.";
+					if ($(input).val().length >= value) {
+						form.error = form.getErrorMessage(input, 'maxlength', value);
 						$(input).focus();
 						return false;
 					}
@@ -44,8 +68,8 @@
 				
 				// validate min length
 				checkminlength: function(input, value) {
-					if ($(input).val().length < value) {
-						form.error = $(input).attr('name') + " must be at least " + value + " character(s) long.";
+					if ($(input).val().length <= value && $(input).val() != "") {
+						form.error = form.getErrorMessage(input, 'minlength', value);
 						$(input).focus();
 						return false;
 					}
@@ -54,8 +78,8 @@
 				
 				// validate number
 				checknumber: function(input) {
-					if (!intRegex.test($(input).val()) || !floatRegex.test($(input).val())) {
-						form.error = $(input).attr('name') + " must be a number";
+					if (!intRegex.test($(input).val()) || !floatRegex.test($(input).val()) && $(input).val() != "") {
+						form.error = form.getErrorMessage(input, 'number');
 						$(input).focus();
 						return false;
 					}
@@ -64,8 +88,8 @@
 				
 				// validate integer
 				checkinteger: function(input) {
-					if (!intRegex.test($(input).val())) {
-						form.error = $(input).attr('name') + " must be an integer";
+					if (!intRegex.test($(input).val()) && $(input).val() != "") {
+						form.error = form.getErrorMessage(input, 'integer');
 						$(input).focus();
 						return false;
 					}
@@ -74,11 +98,11 @@
 				
 				// validate range
 				checkrange: function(input, range) {
-					if (form.checknumber(input, $(input).val())) {
+					if (form.checknumber(input, $(input).val()) && $(input).val() != "") {
 						var min = range.substr(0,range.indexOf('-'));
 						var max = range.substr(range.indexOf('-')+1);
-						if ($(input).val() > min || $(input).val() < max) {
-							form.error = $(input).attr('name') + " must be a number between " + min + " and " + max;
+						if ($(input).val() <= min || $(input).val() >= max) {
+							form.error = form.getErrorMessage(input, 'range', null, min, max);
 							$(input).focus();
 							return false;
 						}
@@ -88,17 +112,30 @@
 				
 				// validate email
 				checkemail: function(input) {
-					
+					if (!emailRegex.test($(input).val()) && $(input).val() != "") {
+						form.error = form.getErrorMessage(input, 'email');
+						$(input).focus();
+						return false;
+					}
+					return true;
 				},
 				
 				// validate phone
 				checkphone: function(input) {
-				
+					if (!phoneRegex.test($(input).val()) && $(input).val() != "") {
+						form.error = form.getErrorMessage(input, 'phone');
+						$(input).focus();
+						return false;
+					}
+					return true;
 				},
 				
 				// validate regex
-				checkexpression: function(input, regex) {
-				
+				checkexpression: function(input, value) {
+					var regex = new RegExp(value);
+					if (!regex.test($(input).val) && $(input).val() != "") {
+						form.error = form.getErrorMessage(input, 'expression');
+					}
 				},
 				
 				// initialize form object
@@ -106,12 +143,14 @@
 					var pass = true;
 					form.error = "";
 					$(obj).find(o.class).each(function() {
-						var args = $(this).attr('data-validate').split(",");
-						for (var i = 0; i < args.length; i++) {
-							if (args[i].indexOf("=") == -1) {
-								pass = form['check' + args[i]](this);
-							} else {
-								pass = form['check' + args[i].substr(0, args[i].indexOf('='))](this, args[i].substr(args[i].indexOf('=')+1));
+						if ($(this).attr('data-validate')) {
+							var args = $(this).attr('data-validate').split(",");
+							for (var i = 0; i < args.length; i++) {
+								if (args[i].indexOf("=") == -1) {
+									pass = form['check' + args[i]](this);
+								} else {
+									pass = form['check' + args[i].substr(0, args[i].indexOf('='))](this, args[i].substr(args[i].indexOf('=')+1));
+								}
 							}
 						}
 						return pass;

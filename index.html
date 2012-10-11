@@ -12,7 +12,10 @@
 			<form>
 				<ul class="clearfix">
 					<li><label>Name:</label><input name="Name" class="quickValidate" type="text" data-validate="required" /></li>
-					<li><label>Age:</label><input name="Age" class="quickValidate" type="text" data-validate="required,number,maxlength=3,range=0-5" /></li>
+					<li><label>Age:</label><input name="Age" class="quickValidate" type="text" data-validate="required,number,maxlength=2,range=1-99" /></li>
+					<li><label>Email:</label><input name="Email" class="quickValidate" type="text" data-validate="required,email" /></li>
+					<li><label>Phone:</label><input name="Phone" class="quickValidate" type="text" data-validate="phone" /></li>
+					<li><label>Expression:</label><input name="Expression" class="quickValidate" type="text" data-validate="expression=/^\d+$/" />
 				</ul>
 				<p><input class="submit" type="submit" value="submit" /></p>
 			</form>
