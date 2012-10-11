@@ -11,8 +11,8 @@
 			<h1>Form Test</h1>
 			<form>
 				<ul class="clearfix">
-					<li><label>Name:</label><input class="quickValidate" type="text" data-validate="required" /></li>
-					<li><label>Age:</label><input class="quickValidate" type="text" data-validate="required,maxlength=3" /></li>
+					<li><label>Name:</label><input name="Name" class="quickValidate" type="text" data-validate="required" /></li>
+					<li><label>Age:</label><input name="Age" class="quickValidate" type="text" data-validate="required,number,maxlength=3,range=0-5" /></li>
 				</ul>
 				<p><input class="submit" type="submit" value="submit" /></p>
 			</form>

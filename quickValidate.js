@@ -13,14 +13,19 @@
 			// set vars
 			var o = options;
 			var obj = this;
+			var intRegex = /^\d+$/;
+			var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
 			
 			// namespace for form object
 			var form = {
 				
+				error: "",
+				
 				// validate required fields
-				checkrequired: function(input) {
+				checkrequired: function(input) {	
 					if ($(input).val() == "" || $(input).val().length == 0) {
-						console.log('failed');
+						form.error = $(input).attr('name') + " is a requird field.";
+						$(input).focus();
 						return false;
 					}
 					return true;
@@ -28,48 +33,113 @@
 				
 				// validate max length
 				checkmaxlength: function(input, value) {
+					
 					if ($(input).val().length > value) {
-						console.log('failed');
+						form.error = $(input).attr('name') + " can only be " + value + " characters long.";
+						$(input).focus();
 						return false;
 					}
-					console.log('passed');
 					return true;
 				},
 				
 				// validate min length
 				checkminlength: function(input, value) {
 					if ($(input).val().length < value) {
-						console.log('failed');
+						form.error = $(input).attr('name') + " must be at least " + value + " character(s) long.";
+						$(input).focus();
 						return false;
 					}
-					console.log('passed');
+					return true;
+				},
+				
+				// validate number
+				checknumber: function(input) {
+					if (!intRegex.test($(input).val()) || !floatRegex.test($(input).val())) {
+						form.error = $(input).attr('name') + " must be a number";
+						$(input).focus();
+						return false;
+					}
 					return true;
 				},
 				
 				// validate integer
 				checkinteger: function(input) {
+					if (!intRegex.test($(input).val())) {
+						form.error = $(input).attr('name') + " must be an integer";
+						$(input).focus();
+						return false;
+					}
+					return true;
+				},
+				
+				// validate range
+				checkrange: function(input, range) {
+					console.log('function');
+					if (form.checkinteger(input, $(input).val())) {
+						console.log('it is a number');
+						var min = range.substr(0,indexOf('-'));
+						var max = range.substr(indexOf('-')+1);
+						if ($(input).val() > min && $(input).val() < max) {
+							form.error = $(input).attr('name') + " must be a number between " + min + " and " + max;
+							$(input).focus();
+							return false;
+						}
+					}
+					return true;
+				},
+				
+				// validate email
+				checkrange: function(input) {
 					
+				},
+				
+				// validate phone
+				checkphone: function(input) {
+				
+				},
+				
+				// validate regex
+				checkexpression: function(input, regex) {
+				
 				},
 				
 				// initialize form object
 				init: function() {
 					var pass = true;
+					form.error = "";
 					$(obj).find(o.class).each(function() {
 						var args = $(this).attr('data-validate').split(",");
 						for (var i = 0; i < args.length; i++) {
-							if (args[i].indexOf("=") == -1)
-								var pass = form['check' + args[i]](this);
-							else {
-								var pass = form['check' + args[i].substr(0, args[i].indexOf('='))](this, args[i].substr(args[i].indexOf('=')+1)); 
-							}	
+							if (args[i].indexOf("=") == -1) {
+								pass = form['check' + args[i]](this);
+							} else {
+								pass = form['check' + args[i].substr(0, args[i].indexOf('='))](this, args[i].substr(args[i].indexOf('=')+1));
+							}
 						}
+						return pass;
 					});
+					form.showError();
 					return pass;
+				},
+				
+				// show error
+				showError: function() {
+					$(obj).prepend("<p>" + form.error + "</p>");
 				}
 				
 			}
 			
-			$('form').submit(function(e) {
+			$(obj).submit(function() {
+				return false;
+				/* normal event when not testing
+				if (!form.init()) {
+					form.showError();
+					return false;
+				}*/
+			});
+			
+			// currently testing
+			$('.submit').click(function() {
 				form.init();
 			});
 		
