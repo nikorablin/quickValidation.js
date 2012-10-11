@@ -74,12 +74,10 @@
 				
 				// validate range
 				checkrange: function(input, range) {
-					console.log('function');
-					if (form.checkinteger(input, $(input).val())) {
-						console.log('it is a number');
-						var min = range.substr(0,indexOf('-'));
-						var max = range.substr(indexOf('-')+1);
-						if ($(input).val() > min && $(input).val() < max) {
+					if (form.checknumber(input, $(input).val())) {
+						var min = range.substr(0,range.indexOf('-'));
+						var max = range.substr(range.indexOf('-')+1);
+						if ($(input).val() > min || $(input).val() < max) {
 							form.error = $(input).attr('name') + " must be a number between " + min + " and " + max;
 							$(input).focus();
 							return false;
@@ -89,7 +87,7 @@
 				},
 				
 				// validate email
-				checkrange: function(input) {
+				checkemail: function(input) {
 					
 				},
 				
