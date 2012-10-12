@@ -14,7 +14,8 @@
 			errorPhone: "$name must be a valid phone number",
 			errorExpression: "$name is not valid",
 			notificationClass: ".notification",
-			errorClass: ".error"
+			errorClass: ".error",
+			debug : false
 		}
 		
 		var options = $.extend(defaults, options);
@@ -47,7 +48,7 @@
 					value = typeof value !== 'undefined' ? value : null;
 					min = typeof min !== 'undefined' ? min : null;
 					max = typeof max !== 'undefined' ? max : null;
-					return o['error' + capitalize(type)].replace('$name', $(input).attr('name')).replace('$value', value).replace('$min', min).replace('$max', max);
+					return o['error' + capitalize(type)].replace('$name', $(input).attr('data-name')).replace('$value', value).replace('$min', min).replace('$max', max);
 				},
 				
 				// validate required fields
@@ -182,8 +183,14 @@
 			}
 			
 			$(obj).submit(function() {
-				if (!form.init(0)) {
+				console.log(o.debug);
+				if (!form.init()) {
 					form.showError();
+					return false;
+				} else if (o.debug) {
+					$(notification).find('h2').html("Congtraulations!");
+					$(notification).find(o.errorClass).html("You have successfully validated a form, tell your friends.");
+					$(notification).show();
 					return false;
 				}
 			});

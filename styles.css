@@ -138,7 +138,7 @@ form label span {
 	font-style:normal;
 }
 
-form input {
+form input, form textarea {
 	padding:0 5px 5px;
 	width:440px;
 	border:none;
@@ -146,6 +146,10 @@ form input {
 	font-family:'Open Sans', sans-serif;
 	background:none;
 	border-bottom:1px dotted #555;
+}
+
+form textarea {
+	height:80px;
 }
 
 form input.submit {
