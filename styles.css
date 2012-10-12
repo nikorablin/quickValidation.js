@@ -20,42 +20,97 @@ time, mark, audio, video {
 }
 
 body {
-	font-family:Arial, sans-serif;
+	font-family:'Open Sans', sans-serif;
+	background:url('http://nikorablin.com/wp-content/themes/nikorablin/images/body_bg.jpg');
+	color:#333;
 }
 
 .container {
 	width:500px;
-	margin:0 auto;
-	padding:20px;
-	border:1px solid #ccc;
-	border-radius:5px;
-	margin-top:20px;
+	margin:20px auto;
+	padding:5px;
+	border-radius:2px;
+	background:url('http://nikorablin.com/wp-content/themes/nikorablin/images/contact_bg.gif');
 }
 
-.clearfix:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
+.inner {
+	padding:15px;
+	border:4px double #ddd;
+	margin:5px;
+	border-radius:2px;
 }
- 
-.clearfix {
-	display: inline-block;
+
+.clearfix:before, .clearfix:after {
+    content: "\0020"; 
+    display: block; 
+    height: 0; 
+    overflow: hidden;
 }
- 
-html[xmlns] .clearfix {
-	display: block;
-}
- 
-* html .clearfix {
-	height: 1%;
-}
+
+.clearfix:after { clear: both; }
+
+.clearfix { zoom: 1; }
 
 h1 {
+	width:300px;
+	float:left;
 	font-size:1.5em;
 	font-weight:bold;
+	line-height:1.2em;
+}
+
+h1 span {
+	display:block;
+	font-size:0.6em;
+	font-weight:normal;
+	line-height:1.5em;
+}
+
+h2 {
+	font-size:1.4em;
+	font-weight:bold;
+	line-height:1em;
+	margin-bottom:5px;
+}
+
+h3 {
+	font-size:1.2em;
+	margin-bottom:1em;
+}
+
+.logo {
+	background:rgb(255,78,0);
+	-moz-border-radius:50px;
+	-webkit-border-radius:55px;
+	padding:23px 14px 22px 13px;
+	width:32px;
+	text-align: center;
+	color:#fff;
+	line-height:0.9em;
+	margin:0 auto;
+	font-size:1em;
+	border:4px double rgba(255,255,255,1), 1px solid rgba(255,255,255,1);
+	font-family: Georgia, serif;
+	font-style:italic;
+	text-decoration:none;
+	float:right;
+}
+
+.logo:hover {
+	background:#13c562;
+}
+
+a {
+	color:rgb(255,78,0);
+	text-decoration:none;
+}
+
+code {
+	font-family:'Courier New', 'Courier', monotype;
+}
+
+a:hover {
+	text-decoration:underline;
 }
 
 form ul {
@@ -66,7 +121,266 @@ form li {
 	padding:5px 0;
 }
 
+form li span {
+	color:#555;
+	font-size:0.75em;
+	font-style:italic;
+}
+
 form label {
-	float:left;
-	width:150px;
+	display:block;
+	font-weight:600;
+}
+
+form label span {
+	color:red;
+	font-size:1em;
+	font-style:normal;
+}
+
+form input {
+	padding:0 5px 5px;
+	width:440px;
+	border:none;
+	font-size:1em;
+	font-family:'Open Sans', sans-serif;
+	background:none;
+	border-bottom:1px dotted #555;
+}
+
+form input.submit {
+	margin-top:10px;
+}
+
+.notification {
+	position:fixed;
+	width:300px;
+	left:50%;
+	background:#fff;
+	margin-left:-150px;
+	margin-top:20px;
+	border-radius:10px;
+	border:10px solid rgba(0,0,0,0.5);
+	-moz-background-clip: padding;     /* Firefox 3.6 */
+	-webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
+	background-clip: padding-box;
+	padding-bottom:15px;
+}
+
+.notification h2 {
+	padding:15px;
+	background: #f73d2c; /* Old browsers */
+	background: -moz-linear-gradient(top, #f73d2c 0%, #d61100 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f73d2c), color-stop(100%,#d61100)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #f73d2c 0%,#d61100 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #f73d2c 0%,#d61100 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #f73d2c 0%,#d61100 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #f73d2c 0%,#d61100 100%); /* W3C */
+	color:#fff;
+	border-top:1px solid #FFAFAF;
+	border-bottom:1px solid #AD0000;
+	text-shadow:0 1px 0 #AD0000;
+	font-weight:bold;
+	font-size:1.2em;
+}
+
+.notification p {
+	padding:15px 15px 0;
+	color:#333;
+}
+
+.notification .close, form .submit {
+	background:#13c562;
+	cursor:pointer;
+	border:1px solid #35a940;
+	text-shadow:1px 1px 0 #35a940;
+	cursor: pointer;
+	display:block;
+	color:#fff;
+	text-decoration:none;
+	padding:5px;
+	text-align:center;
+	border-radius:5px;
+	width:100px;
+	margin:0 auto;
+	box-shadow:inset 0 1px 0 #7bffb6;
+}
+
+.container p {
+	margin:1.5em 0;
+	font-size:0.85em;
+	line-height:1.8em;
+}
+
+table {
+	border-spacing:0;
+	border-collapse:collapse;
+	border:1px solid #ccc;
+	font-size:0.85em;
+	width:100%;
+	margin-top:20px;
+}
+
+table tr {
+	border-bottom:1px solid #ccc;
+}
+
+table td {
+	padding:10px;
+}
+
+table em {
+	font-size:0.9em;
+	font-style:italic;
+}
+
+ul.list {
+	margin-left:20px;
+	margin-top:-10px;
+	font-size:0.8em;
+}
+
+ul.list li {
+	padding:2px 0;
+}
+
+
+/* code
+--------------------------------------------- */
+code, pre {
+	font-family: Consolas, Monaco, "Andale Mono", "Courier New", monospace;
+	font-size: 14px;
+	white-space: pre-wrap;
+	overflow:auto;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+code {
+    padding: 0 3px;
+    line-height: 23px;
+}
+
+pre {
+	display: block;
+	padding: 10px 15px;
+	margin: 15px 0;
+	background-color: #fafae6;
+	border: 1px solid #ddd;
+    white-space: pre;
+    overflow:auto;
+    overflow-y: hidden; *padding-bottom: 20px; /* Remove vertical scrollbar on Ie6, IE7 */
+}
+
+.str
+{
+    color: #EC7600;
+}
+.kwd
+{
+    color: #93C763;
+}
+.com
+{
+    color: #66747B;
+}
+.typ
+{
+    color: #678CB1;
+}
+.lit
+{
+    color: #FACD22;
+}
+.pun
+{
+    color: #F1F2F3;
+}
+.pln
+{
+    color: #F1F2F3;
+}
+.tag
+{
+    color: #8AC763;
+}
+.atn
+{
+    color: #E0E2E4;
+}
+.atv
+{
+    color: #EC7600;
+}
+.dec
+{
+    color: purple;
+}
+pre.prettyprint
+{
+    border: 0px solid #888;
+}
+ol.linenums
+{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.prettyprint {
+    background: #000;
+}
+li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9
+{
+    color: #555;
+    list-style-type: decimal;
+}
+li.L1, li.L3, li.L5, li.L7, li.L9 {
+    background: #111;
+}
+@media print
+{
+    .str
+    {
+        color: #060;
+    }
+    .kwd
+    {
+        color: #006;
+        font-weight: bold;
+    }
+    .com
+    {
+        color: #600;
+        font-style: italic;
+    }
+    .typ
+    {
+        color: #404;
+        font-weight: bold;
+    }
+    .lit
+    {
+        color: #044;
+    }
+    .pun
+    {
+        color: #440;
+    }
+    .pln
+    {
+        color: #000;
+    }
+    .tag
+    {
+        color: #006;
+        font-weight: bold;
+    }
+    .atn
+    {
+        color: #404;
+    }
+    .atv
+    {
+        color: #060;
+    }
 }

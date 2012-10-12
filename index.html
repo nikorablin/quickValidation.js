@@ -1,31 +1,179 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<script src="quickValidate.js"></script>
+		<title>quickValidation.js - A jQuery Form Validation Plugin</title>
 		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="js/quickValidate.js"></script>
+		<script type="text/javascript" src="js/prettify.js"></script>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" type="text/css" href="styles.css" />
+		<script type="text/javascript">
+		$(document).ready(function() {
+			prettyPrint();
+		});
+		</script>
 	</head>
 	<body>
 		<div class="notification">
 			<h2>Something went wrong</h2>
 			<p class="error"></p>
+			<p><a class="close" href="close">Okay</a></p>
 		</div>
-		<div class="container">
-			<h1>Form Test</h1>
-			<form>
-				<ul class="clearfix">
-					<li><label>Name:</label><input name="Name" class="quickValidate" type="text" data-validate="required" /></li>
-					<li><label>Age:</label><input name="Age" class="quickValidate" type="text" data-validate="required,range=1-99" /></li>
-					<li><label>Email:</label><input name="Email" class="quickValidate" type="text" data-validate="required,email" /></li>
-					<li><label>Phone:</label><input name="Phone" class="quickValidate" type="text" data-validate="required,phone" /></li>
-					<li><label>Expression:</label><input name="Expression" class="quickValidate" type="text" data-validate="expression=/^\d+$/" />
+		
+		<div id="masthead" class="container clearfix">
+			<div class="inner clearfix">
+				<h1>quickValidation.js
+					<span>
+						jQuery form validation that makes sense<br />
+						Written by <a href="http://nikorablin.com">Nik Korablin</a>, <a href="http://twitter.com/nikorablin">@nikorablin</a>
+					</span>
+				</h1>
+				<a class="logo" href="http://nikorablin.com">
+					Niko
+				</a>
+			</div>
+		</div>
+		
+		<div id="demo" class="container clearfix">
+			<div class="inner">
+				<h2>Demo</h2>
+				<form>
+					<ul class="clearfix">
+						<li><label>Name: <span>*</span></label><input name="Name" class="quickValidate" type="text" data-validate="required" /><span>Just a required field</span></li>
+						<li><label>Range: <span>*</span></label><input name="Range" class="quickValidate" type="text" data-validate="required,range=1-99" /><span>A required field, with a range of 1-99</li>
+						<li><label>Email: <span>*</span></label><input name="Email" class="quickValidate" type="text" data-validate="required,email" /><span>A required field, must be a valid email</span></li>
+						<li><label>Phone:</label><input name="Phone" class="quickValidate" type="text" data-validate="phone" /><span>Not required, must be a valid phone number</span></li>
+						<li><label>Number:</label><input name="Number" class="quickValidate" type="text" data-validate="number" /><span>Not required, must be a valid number, can be an integer or a float</span></li>
+						<li><label>Integer:</label><input name="Integer" class="quickValidate" type="text" data-validate="integer" /><span>Not required, must be a valid integer</span></li>
+						<li><label>Min Length:</label><input name="Min Length" class="quickValidate" type="text" data-validate="minlength=3" /><span>Not required, must be at least 3 characters</span></li>
+						<li><label>Max Length:</label><input name="Max Length" class="quickValidate" type="text" data-validate="maxlength=5" /><span>Not required, must be no more than 5 characters</span></li>
+						<li><label>Expression:</label><input name="Expression" class="quickValidate" type="text" data-validate="expression=/^\d+$/" /><span>Not required, must match custom regular expression /^\d+$/</span></li>
+					</ul>
+					<p><input class="submit" type="submit" value="Validate!" /></p>
+				</form>
+				<script type="text/javascript">
+					$('form').quickValidate();
+					
+					// ignore everything below, just for the demo page
+					/*
+					$('form').submit(function(){
+						$('.notification').find('h2').html('Congratulations!');
+						$('.notification').find('p.error').html('Your form has successfully been validated');
+						$('.notification').show();
+						return false;
+					});*/
+					
+					$('.close').click(function(e) {
+						e.preventDefault();
+						$(this).parents('div').hide();
+					});
+				
+				</script>
+			</div>
+		</div>
+		
+		<div id="usage" class="container clearfix">
+			<div class="inner">
+				<h2>Usage</h2>
+				<p>quickValidation.js works in a way I think makes sense. Instead of defining rules in the Javascript, I assign them right in the input itself.</p>
+				<p>Using a <code>data-validate</code> attribute in the input tag, you can string together rules like this <code>required,number,range=0-99</code> and then add the <code>.quickValidate</code> class, and you're ready to go.</p>
+				<h3>HTML</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="required,number,range=0-99" /&gt;</pre>
+				<h3>Javascript Call</h3>
+				<pre class="prettyprint">
+&lt;script type="text/javascript"&gt;
+	$('form').quickValidate();
+&lt;/script&gt;</pre>
+				<h3>Required Field</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="required" /&gt;</pre>
+				<h3>Max Length</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="maxlength=140" /&gt;</pre>
+				<h3>Minimum Length</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="minlength=3" /&gt;</pre>
+				<h3>Number</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="number" /&gt;</pre>
+				
+				<h3>Integer</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="integer" /&gt;</pre>
+				
+				<h3>Range</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="range=1-10" /&gt;</pre>
+				<h3>Email</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="email" /&gt;</pre>
+				<h3>Phone</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="required" /&gt;</pre>
+				<h3>Regular Expression Match</h3>
+				<pre class="prettyprint">
+&lt;input type="text" name="Name" class="quickValidate" data-validate="expression=/^\d+$/" /&gt;</pre>
+			</div>		
+		</div>
+		
+		<div id="options" class="container clearfix">
+			<div class="inner">
+				<h2>Options</h2>
+				<table>
+					<tr>
+						<td>class</td><td>Class of inputs being validated, <em>default: .quickValidate</em></td>
+					</tr>
+					<tr>
+						<td>notificationClass</td><td>Class of notification popup <em>default: .notification</em></td>
+					</tr>
+					<tr>
+						<td>errorClass</td><td>Class of error text in notification <em>default: .error</em></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div id="errors" class="container clearfix">
+			<div class="inner">
+				<h2>Custom Errors</h2>
+				<p>You can also have custom error text with this plugin. All you need to do is set the option when calling the quickValidate() function like this:</p>
+				<pre class="prettyprint">
+&lt;script type="text/javascript"&gt;
+	$('form').quickValidate({
+		'errorRequired' : '$name is a required field'
+	});
+&lt;/script&gt;</pre>
+				<p>Use <code>$name</code> to signify when the name of a field is to be used. Use <code>$value</code> when the value of that rule is to be used, and use $min and $max for the minimum and maximum values in ranges.</p>
+				<p>Here are the errors you can customize:</p>
+				
+				<ul class="list">
+					<li>errorRequired</li>
+					<li>errorMaxlengtn</li>
+					<li>errorMinlength</li>
+					<li>errorNumber</li>
+					<li>errorInteger</li>
+					<li>errorRange</li>
+					<li>errorEmail</li>
+					<li>errorPhone</li>
+					<li>errorExpression</li>
 				</ul>
-				<p><input class="submit" type="submit" value="Validate!" /></p>
-			</form>
-			<script type="text/javascript">
-				$('form').quickValidate();
-			</script>
+			</div>
 		</div>
+		
+		<div id="credits" class="container clearfix">
+			<div class="inner">
+				<h2>License</h2>
+				<p>As always, this plugin is free to use however you like. A link back or a tweet mentioning the plugin is always nice, but not required. Enjoy!</p>
+				
+				<ul class="list">
+					<li><a href="https://github.com/nikorablin/quickValidation.js">GitHub</a></li>
+					<li><a href="http://nikorablin.com">nikorablin.com</a></li>
+					<li><a href="http://twitter.com/nikorablin">@nikorablin</a></li>
+				</ul>
+			</div>
+		</div>
+		
 	</body>
 </html>
