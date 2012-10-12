@@ -12,7 +12,8 @@
 			errorRange: "$name must be between $min and $max",
 			errorEmail: "$name must be a valid email address",
 			errorPhone: "$name must be a valid phone number",
-			errorExpression: "$name is not valid"
+			errorExpression: "$name is not valid",
+			notificationClass: ".notification"
 		}
 		
 		var options = $.extend(defaults, options);
@@ -22,10 +23,13 @@
 			// set vars
 			var o = options;
 			var obj = this;
+			var notification = $(document).find(o.notificationClass);
 			var intRegex = /^\d+$/;
 			var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
 			var phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 			var emailRegex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
+			
+			$(notification).hide();
 			
 			function capitalize(string) {
 			    return string.charAt(0).toUpperCase() + string.slice(1);
@@ -99,15 +103,21 @@
 				// validate range
 				checkrange: function(input, range) {
 					if (form.checknumber(input, $(input).val()) && $(input).val() != "") {
+						form.error = form.getErrorMessage(input, 'range', null, min, max);
 						var min = range.substr(0,range.indexOf('-'));
 						var max = range.substr(range.indexOf('-')+1);
-						if ($(input).val() <= min || $(input).val() >= max) {
+						if (parseFloat($(input).val()) < min || parseFloat($(input).val()) > max) {
 							form.error = form.getErrorMessage(input, 'range', null, min, max);
-							$(input).focus();
-							return false;
+						} else {
+							return true;
 						}
+						$(input).focus();
+						return false;
+					} else {
+						form.error = form.getErrorMessage(input, 'number');
+						$(input).focus();
+						return false;
 					}
-					return true;
 				},
 				
 				// validate email
@@ -135,14 +145,17 @@
 					var regex = new RegExp(value);
 					if (!regex.test($(input).val) && $(input).val() != "") {
 						form.error = form.getErrorMessage(input, 'expression');
+						$(input).focus();
+						return false;
 					}
+					return true;
 				},
 				
 				// initialize form object
 				init: function() {
 					var pass = true;
 					form.error = "";
-					$(obj).find(o.class).each(function() {
+					$(obj).find(o.class).each(function(e) {
 						if ($(this).attr('data-validate')) {
 							var args = $(this).attr('data-validate').split(",");
 							for (var i = 0; i < args.length; i++) {
@@ -151,35 +164,26 @@
 								} else {
 									pass = form['check' + args[i].substr(0, args[i].indexOf('='))](this, args[i].substr(args[i].indexOf('=')+1));
 								}
+								if (!pass)
+									return pass;
 							}
 						}
-						return pass;
 					});
-					form.showError();
 					return pass;
 				},
 				
 				// show error
 				showError: function() {
-					$(obj).prepend("<p>" + form.error + "</p>");
+					$(notification).find('p.error').html(form.error);
+					$(notification).show();
 				}
 				
 			}
 			
 			$(obj).submit(function() {
-				return false;
-				/* normal event when not testing
-				if (!form.init()) {
-					form.showError();
-					return false;
-				}*/
+				return form.init();
 			});
 			
-			// currently testing
-			$('.submit').click(function() {
-				form.init();
-			});
-		
 		});
 		
 	}
