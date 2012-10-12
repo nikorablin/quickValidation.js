@@ -153,6 +153,17 @@
 					return true;
 				},
 				
+				checkradio: function(input) {
+					var name = $(input).attr('name');
+					$(obj).find('input[name=' + name + "]").each(function() {
+						console.log($(this).val());
+					});
+					if (!$(input).val()) {
+						return false;
+					}
+					return false;
+				},
+				
 				// initialize form object
 				init: function() {
 					var pass = true;
@@ -183,7 +194,6 @@
 			}
 			
 			$(obj).submit(function() {
-				console.log(o.debug);
 				if (!form.init()) {
 					form.showError();
 					return false;
@@ -193,6 +203,7 @@
 					$(notification).show();
 					return false;
 				}
+				return false;
 			});
 			
 		});

@@ -138,6 +138,11 @@ form label span {
 	font-style:normal;
 }
 
+form label.noFloat {
+	display:inline;
+	font-weight:normal;
+}
+
 form input, form textarea {
 	padding:0 5px 5px;
 	width:440px;
@@ -146,6 +151,11 @@ form input, form textarea {
 	font-family:'Open Sans', sans-serif;
 	background:none;
 	border-bottom:1px dotted #555;
+}
+
+form input.noFloat {
+	display:inline;
+	width:auto;
 }
 
 form textarea {
