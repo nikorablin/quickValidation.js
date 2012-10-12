@@ -1,0 +1,1 @@
+Read more at http://sandbox.nikorablin.com/quickValidation
