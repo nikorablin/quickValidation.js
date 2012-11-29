@@ -203,7 +203,7 @@
 					$(notification).show();
 					return false;
 				}
-				return false;
+				return true;
 			});
 			
 		});
